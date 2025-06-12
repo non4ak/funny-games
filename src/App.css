@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --green-color: #9ABF54;
+  --yellow-color: #a0b965;
+  --block-color: #a1c181;
+}
+
+.button-submit {
+    background-color: var(--green-color);
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.2);
+    color: #fff;
+}
+
+.tik-block {
+  background-color: var(--block-color);
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounce-in {
+  animation: bounceIn 0.7s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+
+  40% {
+    transform: translateX(5px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
