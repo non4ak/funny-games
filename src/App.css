@@ -12,8 +12,12 @@
     color: #fff;
 }
 
+.button-submit:hover {
+  background-color: var(--green-color);
+}
+
 .tik-block {
-  background-color: var(--block-color);
+  background-color: #71c84f;
 }
 
 @keyframes bounceIn {

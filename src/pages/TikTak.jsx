@@ -1,24 +1,93 @@
 import { useEffect, useState } from 'react'
-import NavBar from '../components/NavBar';
 import Section from '../components/Section';
 import TurnSection from '../components/TurnSection';
 import ResultModal from '../components/ResultModal';
 import { checkIfWin } from '../utils/tic-tac';
+import socket from '../socket.js';
+import { useLocation } from 'react-router-dom';
+import TicTakBoard from '../components/TicTacBoard.jsx';
+import Waiting from '../components/Waiting.jsx';
 
 
 export default function TikTak() {
     const [board, setBoard] = useState(Array(9).fill(null));
     const [isWinner, setWinner] = useState(null);
     const [isCross, setSide] = useState(true);
+    const [yourSymbol, setYourSymbol] = useState(null);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [players, setPlayers] = useState([]);
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const roomId = queryParams.get("room") || "none";
 
     const handleClick = (index) => {
         if (board[index]) return;
-        const newBoard = [...board];
-        newBoard[index] = isCross ? "X" : "O";
-        setBoard(newBoard);
-        setWinner(checkIfWin(newBoard));
-        setSide(!isCross);
+
+        if ((isCross && yourSymbol === "X") || (!isCross && yourSymbol === "O")) {
+            const newBoard = [...board];
+            newBoard[index] = yourSymbol;
+            setBoard(newBoard);
+            setWinner(checkIfWin(newBoard));
+            setSide(!isCross);
+
+            socket.emit('move', {
+                roomId: roomId,
+                index: index,
+                symbol: yourSymbol,
+            });
+        }
     }
+
+    const handleStartGame = () => {
+        socket.emit('startGame', roomId);
+    }
+
+    useEffect(() => {
+        socket.emit('join', roomId);
+
+        socket.on('playerJoined', ({ playerId, symbol }) => {
+            setYourSymbol(symbol);
+            console.log("JOINED ", playerId, "SYMBOL ", symbol);
+        });
+
+        socket.on('playersInRoom', players => {
+            setPlayers(players.map((playerId, index) => (
+                {
+                    playerId: playerId,
+                    playerName: `Player ${index + 1}`
+                }
+            )));
+        })
+
+        socket.on('startGame', () => {
+            const timer = setTimeout(() => {
+                setGameStarted(true);
+                console.log(gameStarted);
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        })
+
+        return () => {
+            socket.off('playerJoined');
+            socket.off('startGame');
+            socket.off('playersInRoom');
+        }
+    }, []);
+
+    useEffect(() => {
+        socket.on("opponentMove", ({ index, symbol }) => {
+            const newBoard = [...board];
+            newBoard[index] = symbol;
+            setBoard(newBoard);
+            setWinner(checkIfWin(newBoard));
+            setSide(prev => !prev);
+        })
+
+        return () => socket.off('opponentMove');
+    }, [board]);
+
 
     useEffect(() => {
         if (isWinner) {
@@ -39,28 +108,18 @@ export default function TikTak() {
     return (
         <>
             <main className='w-full h-screen bg-gray-100'>
-                <NavBar />
                 <Section heading="Tic Tac Toe">
-                    <TurnSection isCross={isCross}/>
-                    <div className='w-[480px] grid grid-cols-3 mx-auto gap-4 text'>
-                        {Array(9).fill(null).map((cell, index) => (
-                            <div
-                                key={index}
-                                onClick={() => handleClick(index)}
-                                className='w-38 h-38 aspect-square border-2 border-gray-300 bg-gray-300 flex items-center justify-center text-5xl font-bold select-none cursor-pointer rounded-xl'
-                            >
-                                {board[index]}
-                            </div>
-                        ))}
-                    </div>
-                    <div className='mx-auto text-center my-4 flex justify-center'>
-                        <button
-                            onClick={resetGame}
-                            className='bg-red-400 text-3xl py-2 w-[200px] text-white cursor-pointer rounded-2xl'>
-                            Reset
-                        </button>
-                    </div>
+                    {gameStarted ? (
+                        <>
+                            <TurnSection isCross={isCross} />
+                            <TicTakBoard board={board} onClick={handleClick} onReset={resetGame} />
+                        </>
+                    ) : (
+                        <Waiting room={roomId} players={players}/>
+                    )}
+
                 </Section>
+                <button onClick={handleStartGame}>Start game</button>
             </main>
             {isWinner && <ResultModal isWinner={isWinner} />}
         </>
