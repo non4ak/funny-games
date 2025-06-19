@@ -1,4 +1,4 @@
-export default function TicTakBoard({ board, onClick, onReset}) {
+export default function TicTakBoard({ board, onClick, onReset, votes}) {
     return (
         <>
             <div className='w-[480px] grid grid-cols-3 mx-auto gap-4 text'>
@@ -16,7 +16,7 @@ export default function TicTakBoard({ board, onClick, onReset}) {
                 <button
                     onClick={onReset}
                     className='bg-red-400 text-3xl py-2 w-[200px] text-white cursor-pointer rounded-2xl'>
-                    Reset
+                    Reset {votes}/2
                 </button>
             </div>
         </>
