@@ -27,8 +27,7 @@ io.on("connection", socket => {
 
         if (!rooms[roomId].includes(socket.id)) {
             rooms[roomId].push(socket.id);
-            console.log("Player added to the room", socket.id);
-            console.log("Гравці у кімнаті", rooms[roomId]);
+
         }
 
         const symbol = rooms[roomId].length === 1 ? "X" : "O";
@@ -98,6 +97,7 @@ io.on("connection", socket => {
                 console.log("Emitting playerLeft");
                 io.to(roomId).emit("playerLeft");
                 io.to(roomId).emit("playersInRoom", rooms[roomId]);
+                io.to(roomId).emit("resetGame");
             }
 
             if (rooms[roomId].length === 0) {

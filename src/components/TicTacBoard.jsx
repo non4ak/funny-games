@@ -6,7 +6,7 @@ export default function TicTakBoard({ board, onClick, onReset, votes}) {
                     <div
                         key={index}
                         onClick={() => onClick(index)}
-                        className='w-38 h-38 aspect-square border-2 border-gray-300 bg-gray-300 flex items-center justify-center text-5xl font-bold select-none cursor-pointer rounded-xl'
+                        className='w-38 h-38 aspect-square border-2 border-gray-300 bg-gray-200 flex items-center justify-center font-suez text-[4rem] select-none cursor-pointer rounded-xl'
                     >
                         {board[index]}
                     </div>

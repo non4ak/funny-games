@@ -1,23 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --green-color: #9ABF54;
-  --yellow-color: #a0b965;
+  --yellow-color: #f4cd00;
   --block-color: #a1c181;
 }
 
 .button-submit {
-    background-color: var(--green-color);
-    box-shadow: 1px 3px 3px rgba(0,0,0,0.2);
-    color: #fff;
+    background-color: var(--yellow-color);
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.1);
+    color: #000;
+    text-transform: uppercase;
+    font-family: "Poppins", sans-serif;
 }
 
-.button-submit:hover {
-  background-color: var(--green-color);
+.font-suez {
+  font-family: "Suez One", serif;
 }
+
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+}
+
+.bg-custom-yellow {
+  background-color: var(--yellow-color);
+}
+
 
 .tik-block {
-  background-color: #71c84f;
+  background-color: #c8d8c7;
 }
 
 @keyframes bounceIn {

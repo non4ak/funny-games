@@ -34,6 +34,7 @@ export const createHandlers = ({
     setSide,
     setVotes,
     getBoard,
+    swap,
 }) => {
     let localTimeoutId = null;
     let localIntervalId = null;
@@ -87,6 +88,7 @@ export const createHandlers = ({
             setGameStarted(false);
             setCounter(5);
             setVotes(0);
+            swap();
         },
 
         opponentMove: ({ index, symbol }) => {
@@ -103,6 +105,7 @@ export const createHandlers = ({
             setSide(true);
             setVotes(0);
             setWinner(null);
+            swap();
         },
 
         updateResetVotes: total => {

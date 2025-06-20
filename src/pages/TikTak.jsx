@@ -26,7 +26,7 @@ export default function TikTak() {
     const roomId = queryParams.get("room") || "none";
 
     const handleClick = (index) => {
-        if (board[index]) return;
+        if (board[index] || isWinner) return;
 
         if ((isCross && yourSymbol === "X") || (!isCross && yourSymbol === "O")) {
             const newBoard = [...board];
@@ -62,6 +62,18 @@ export default function TikTak() {
         socket.emit("resetRequest", roomId, socket.id);
     };
 
+    const swap = () => {
+        setYourSymbol(prev => {
+            if (prev === "X") {
+                return "O";
+            } else if (prev === "O") {
+                return "X";
+            } else {
+                console.log("Error");
+            }
+        })
+    };
+
     const handlers = createHandlers({
         setYourSymbol,
         setPlayers,
@@ -72,7 +84,9 @@ export default function TikTak() {
         setSide,
         setVotes,
         getBoard: () => board,
+        swap,
     });
+
 
 
     useEffect(() => {
@@ -99,7 +113,7 @@ export default function TikTak() {
 
     useEffect(() => {
         socket.on("opponentMove", handlers.opponentMove);
-        return () => socket.off('opponentMove');
+        return () => socket.off('opponentMove', handlers.opponentMove);
     }, [board]);
 
     useEffect(() => {
@@ -124,15 +138,16 @@ export default function TikTak() {
         setBoard(Array(9).fill(null));
         setSide(true);
         setWinner(null);
+        swap();
     }
 
     return (
         <>
-            <main className='w-full h-screen bg-gray-100'>
+            <main className='w-full h-screen '>
                 <Section heading="Tic Tac Toe">
                     {gameStarted ? (
                         <>
-                            <TurnSection isCross={isCross} />
+                            <TurnSection isCross={isCross} players={players} symbol={yourSymbol} />
                             <TicTakBoard board={board} onClick={handleClick} onReset={handleResetRequest} votes={votes}/>
                         </>
                     ) : (
