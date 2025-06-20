@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import NavBar from '../components/NavBar';
 import Section from '../components/Section';
+import { WORDS_ARRAY } from '../utils/data';
 
 export default function Wordle() {
     const [board, setBoard] = useState(Array.from({ length: 6 }, () => Array(5).fill('')));
@@ -11,7 +12,7 @@ export default function Wordle() {
     const [isWin, setIsWin] = useState(false);
     const [isLost, setIsLost] = useState(false);
     const [isShaking, setIsShaking] = useState(false);
-    const wordToGuess = Array.from("dream".toUpperCase());
+    const wordToGuess = Array.from(WORDS_ARRAY[Math.floor(Math.random() * WORDS_ARRAY.length)].toUpperCase());
 
     const handleSubmit = () => {
         setError(null);
@@ -83,7 +84,7 @@ export default function Wordle() {
 
     return (
         <>
-            <div className='w-full h-screen'>
+            <div className='w-full'>
                 <Section heading={"Wordle"}>
                     <div className='grid grid-rows-6 w-[400px] mx-auto gap-4 justify-center'>
                         {board.map((_, rowIndex) => (

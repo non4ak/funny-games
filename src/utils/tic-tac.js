@@ -71,7 +71,6 @@ export const createHandlers = ({
     return {
         playerJoined: ({ playerId, symbol }) => {
             setYourSymbol(symbol);
-            console.log("JOINED", playerId, "SYMBOL", symbol);
         },
 
         playersInRoom: (players) => {
@@ -82,6 +81,11 @@ export const createHandlers = ({
         },
 
         startGame,
+
+        cancelGame: () => {
+            clearTimers();
+            setCounter(5);
+        },
 
         playerLeft: () => {
             clearTimers();

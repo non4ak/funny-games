@@ -53,9 +53,7 @@ export default function TikTak() {
     }
 
     const handleCancelGame = () => {
-        if (gameStarted) {
-            setGameStarted(false);
-        }
+        socket.emit("cancelGame", roomId);
     }
     
     const handleResetRequest = () => {
@@ -64,15 +62,11 @@ export default function TikTak() {
 
     const swap = () => {
         setYourSymbol(prev => {
-            if (prev === "X") {
-                return "O";
-            } else if (prev === "O") {
-                return "X";
-            } else {
-                console.log("Error");
-            }
-        })
-    };
+            if (prev === "X") return "O";
+            if (prev === "O") return "X";
+            console.log("Error");
+        }
+    )};
 
     const handlers = createHandlers({
         setYourSymbol,
@@ -87,8 +81,6 @@ export default function TikTak() {
         swap,
     });
 
-
-
     useEffect(() => {
         socket.emit('join', roomId);
 
@@ -98,6 +90,7 @@ export default function TikTak() {
         socket.on('playerLeft', handlers.playerLeft);
         socket.on('resetGame', handlers.resetGame);
         socket.on('resetVotesUpdate', handlers.updateResetVotes);
+        socket.on('cancelGame', handlers.cancelGame);
 
         return () => {
             socket.off('playerJoined', handlers.playerJoined);
@@ -106,7 +99,6 @@ export default function TikTak() {
             socket.off('playerLeft', handlers.playerLeft);
             socket.off('resetGame', handlers.resetGame);
             socket.off('resetVotesUpdate', handlers.updateResetVotes);
-            socket.emit("leaveRoom", roomId);
             handlers.clearTimers();
         };
     }, []);
@@ -141,9 +133,11 @@ export default function TikTak() {
         swap();
     }
 
+    console.log(players);
+
     return (
         <>
-            <main className='w-full h-screen '>
+            <main className='w-full'>
                 <Section heading="Tic Tac Toe">
                     {gameStarted ? (
                         <>

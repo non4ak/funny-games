@@ -1,0 +1,21 @@
+export const WORDS_ARRAY = [
+  "apple", "bread", "chair", "dream", "earth",
+  "field", "grape", "house", "image", "jelly",
+  "knife", "lemon", "mouse", "night", "ocean",
+  "plant", "queen", "river", "stone", "table",
+  "under", "voice", "water", "xenon", "youth",
+  "zebra", "angel", "beach", "cloud", "dance",
+  "eagle", "fence", "giant", "heart", "inbox",
+  "jumps", "kites", "laugh", "money", "noble",
+  "onion", "peace", "quiet", "raise", "scarf",
+  "teeth", "uncle", "vivid", "wrist", "xerox",
+  "yummy", "zesty", "alert", "basic", "clean",
+  "drink", "event", "flame", "grill", "happy",
+  "input", "jelly", "koala", "lucky", "mango",
+  "novel", "orbit", "piano", "quiet", "rider",
+  "sugar", "tiger", "urban", "vapor", "whale",
+  "xenon", "young", "zonal", "admit", "blame",
+  "crisp", "doubt", "entry", "faith", "glory",
+  "honey", "ideal", "joint", "kneel", "liver",
+  "merry", "nurse", "optic", "party", "quick"
+];

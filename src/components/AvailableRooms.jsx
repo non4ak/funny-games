@@ -7,7 +7,7 @@ export default function AvailableRooms({ rooms, onClick }) {
             ) : (
                 <div className="flex flex-col gap-4">
                     {rooms.map((room, index) => (
-                        <div key={index} className="flex text-xl justify-between px-12 items-center py-2 border border-gray-200 shadow-md">
+                        <div key={index} className="flex text-xl justify-between px-12 items-center py-2 border border-gray-200 shadow-md bg-white">
 
                             <p className="font-semibold">{room.roomId}</p>
                             <p>{room.playersCount}/2</p>
